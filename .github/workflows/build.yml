@@ -45,17 +45,17 @@ jobs:
       with:
             filename: Artifacts/UAssetAPI.zip
             path: UAssetAPI/UAssetAPI/bin
-            directory: $GITHUB_WORKSPACE
+            directory: .
             
     - name: Zip UAssetGUI artifact
       uses: TheDoctor0/zip-release@0.7.6
       with:
             filename: Artifacts/UAssetGUI.zip
             path: /UAssetGUI/bin
-            directory: $GITHUB_WORKSPACE
+            directory: .
             
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.3.3
       with:
-        path: $GITHUB_WORKSPACE/Artifacts/*.zip
+        path: Artifacts/*.zip
         if-no-files-found: error
