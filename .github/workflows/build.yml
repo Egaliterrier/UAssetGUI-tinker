@@ -39,10 +39,23 @@ jobs:
 
     - name: Build
       run: msbuild UAssetGUI.sln /p:Configuration=Release
-
+      
+    - name: Zip UAssetAPI artifact
+      uses: TheDoctor0/zip-release@0.7.6
+      with:
+            filename: Artifacts/UAssetAPI.zip
+            path: UAssetAPI/UAssetAPI/bin
+            directory: $GITHUB_WORKSPACE
+            
+    - name: Zip UAssetGUI artifact
+      uses: TheDoctor0/zip-release@0.7.6
+      with:
+            filename: Artifacts/UAssetGUI.zip
+            path: /UAssetGUI/UAssetGUI/bin
+            directory: $GITHUB_WORKSPACE
+            
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: uYouEnhanced_${{ env.YOUTUBE_VERSION }}_${{ env.UYOU_VERSION }}
-        path: bin\*.*
+        path: $GITHUB_WORKSPACE/Artifacts/*.zip
         if-no-files-found: error
