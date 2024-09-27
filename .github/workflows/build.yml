@@ -1,6 +1,6 @@
 name: CI
 on:
-  push:
+  workflow_run:
     branches:
       - master
 
@@ -39,3 +39,10 @@ jobs:
 
     - name: Build
       run: msbuild UAssetGUI.sln /p:Configuration=Release
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: uYouEnhanced_${{ env.YOUTUBE_VERSION }}_${{ env.UYOU_VERSION }}
+        path: bin\*.*
+        if-no-files-found: error
