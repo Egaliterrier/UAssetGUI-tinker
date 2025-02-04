@@ -22,6 +22,7 @@ namespace UAssetGUI
         None = -1,
         GeneralInformation,
         NameMap,
+        SoftObjectPathList,
         Imports,
         ExportInformation,
         SoftPackageReferences,
@@ -56,7 +57,8 @@ namespace UAssetGUI
         ByteArray,
         Dummy,
         UserDefinedStructData,
-        Kismet
+        Kismet,
+        KismetByteArray
     }
 
     public class PointingTreeNode : TreeNode
@@ -212,6 +214,7 @@ namespace UAssetGUI
             treeView1.Nodes.Clear();
             treeView1.BackColor = UAGPalette.BackColor;
             treeView1.Nodes.Add(new PointingTreeNode("General Information", null));
+            if (asset.SoftObjectPathList != null && (asset.SoftObjectPathList.Count > 0 || !asset.IsFilterEditorOnly)) treeView1.Nodes.Add(new PointingTreeNode("Soft Object Paths", null));
             treeView1.Nodes.Add(new PointingTreeNode("Name Map", null));
             treeView1.Nodes.Add(new PointingTreeNode("Import Data", null));
             treeView1.Nodes.Add(new PointingTreeNode("Export Information", null));
@@ -283,7 +286,7 @@ namespace UAssetGUI
                                 categoryNode.Nodes.Add(parentNode2);
                                 if (structUs.ScriptBytecode == null)
                                 {
-                                    var bytecodeNode = new PointingTreeNode("ScriptBytecode (" + structUs.ScriptBytecodeRaw.Length + " B)", structUs.ScriptBytecodeRaw, PointingTreeNodeType.Normal, i);
+                                    var bytecodeNode = new PointingTreeNode("ScriptBytecode (" + structUs.ScriptBytecodeRaw.Length + " B)", structUs, PointingTreeNodeType.KismetByteArray, i);
                                     bytecodeNode.ChildrenInitialized = true;
                                     parentNode2.Nodes.Add(bytecodeNode);
                                 }
@@ -948,8 +951,8 @@ namespace UAssetGUI
                 if (nameB == null || typeB == null) return null;
                 if (!(nameB is string) || !(typeB is string)) return null;
 
-                string name = (string)nameB;
-                string type = (string)typeB;
+                string name = ((string)nameB)?.Trim();
+                string type = ((string)typeB)?.Trim();
                 if (name.Equals(string.Empty) || type.Equals(string.Empty)) return null;
 
                 FName nameName = namesAreDummies ? FName.DefineDummy(asset, name) : FName.FromString(asset, name);
@@ -1264,6 +1267,18 @@ namespace UAssetGUI
                     }
                     //((Form1)dataGridView1.Parent).CurrentDataGridViewStrip = ((Form1)dataGridView1.Parent).nameMapContext;
                     break;
+                case TableHandlerMode.SoftObjectPathList:
+                    AddColumns(new string[] { "PackageName", "AssetName", "SubPathString", "" });
+
+                    for (int num = 0; num < asset.SoftObjectPathList.Count; num++)
+                    {
+                        string a = asset.SoftObjectPathList[num].AssetPath.PackageName == null ? FString.NullCase : asset.SoftObjectPathList[num].AssetPath.PackageName.ToString();
+                        string b = asset.SoftObjectPathList[num].AssetPath.AssetName == null ? FString.NullCase : asset.SoftObjectPathList[num].AssetPath.AssetName.ToString();
+                        string c = asset.SoftObjectPathList[num].SubPathString == null ? FString.NullCase : asset.SoftObjectPathList[num].SubPathString.ToString();
+                        dataGridView1.Rows.Add(a, b, c);
+                        dataGridView1.Rows[num].HeaderCell.Value = Convert.ToString(num);
+                    }
+                    break;
                 case TableHandlerMode.Imports:
                     AddColumns(new string[] { "ClassPackage", "ClassName", "OuterIndex", "ObjectName", "bImportOptional", "" });
 
@@ -1420,12 +1435,23 @@ namespace UAssetGUI
                         bool standardRendering = true;
                         PropertyData[] renderingArr = null;
 
-                        if (pointerNode.Type == PointingTreeNodeType.ByteArray)
+                        if (pointerNode.Type == PointingTreeNodeType.ByteArray || pointerNode.Type == PointingTreeNodeType.KismetByteArray)
                         {
                             Control currentlyFocusedControl = origForm.ActiveControl;
                             dataGridView1.Visible = false;
                             byteView1.SetBytes(new byte[] { });
-                            byteView1.SetBytes(pointerNode.Pointer is RawExport ? ((RawExport)pointerNode.Pointer).Data : ((NormalExport)pointerNode.Pointer).Extras);
+                            if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                            {
+                                byteView1.SetBytes(((StructExport)pointerNode.Pointer).ScriptBytecodeRaw);
+                            }
+                            else if (pointerNode.Pointer is RawExport)
+                            {
+                                byteView1.SetBytes(((RawExport)pointerNode.Pointer).Data);
+                            }
+                            else if (pointerNode.Pointer is NormalExport)
+                            {
+                                byteView1.SetBytes(((NormalExport)pointerNode.Pointer).Extras);
+                            }
                             byteView1.Visible = true;
                             origForm.importBinaryData.Visible = true;
                             origForm.exportBinaryData.Visible = true;
@@ -2052,6 +2078,27 @@ namespace UAssetGUI
                             finalStr.IsCasePreserving = isCasePreserving;
                             asset.AddNameReference(finalStr, true);
                         }
+                    }
+                    break;
+                case TableHandlerMode.SoftObjectPathList:
+                    if (asset.SoftObjectPathList == null) asset.SoftObjectPathList = new List<FSoftObjectPath>();
+
+                    asset.SoftObjectPathList.Clear();
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        string a = row.Cells[0].Value as string;
+                        string b = row.Cells[1].Value as string;
+                        string c = row.Cells[2].Value as string;
+
+                        if (a == FString.NullCase) a = null;
+                        if (b == FString.NullCase) b = null;
+                        if (c == FString.NullCase) c = null;
+
+                        // if all empty, then remove (invalid, probably just the last row)
+                        if (a == null && b == null && c == null) continue;
+
+                        FSoftObjectPath nuevo = new FSoftObjectPath(FName.FromString(asset, a), FName.FromString(asset, b), FString.FromString(c));
+                        asset.SoftObjectPathList.Add(nuevo);
                     }
                     break;
                 case TableHandlerMode.Imports:

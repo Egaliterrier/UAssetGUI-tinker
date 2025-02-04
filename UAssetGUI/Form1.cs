@@ -76,119 +76,128 @@ namespace UAssetGUI
 
             UAGUtils.InitializeInvoke(this);
 
-            UAGConfig.Load();
-
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            UAGUtils._displayVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
-            string gitVersionGUI = string.Empty;
-            using (Stream stream = assembly.GetManifestResourceStream("UAssetGUI.git_commit.txt"))
+            try
             {
-                if (stream != null)
+                UAGConfig.Load();
+
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                UAGUtils._displayVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+                string gitVersionGUI = string.Empty;
+                using (Stream stream = assembly.GetManifestResourceStream("UAssetGUI.git_commit.txt"))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    if (stream != null)
                     {
-                        if (reader != null) gitVersionGUI = reader.ReadToEnd().Trim();
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            if (reader != null) gitVersionGUI = reader.ReadToEnd().Trim();
+                        }
                     }
                 }
-            }
 
-            if (!gitVersionGUI.All("0123456789abcdef".Contains)) gitVersionGUI = string.Empty;
+                if (!gitVersionGUI.All("0123456789abcdef".Contains)) gitVersionGUI = string.Empty;
 
-            string gitVersionAPI = string.Empty;
-            using (Stream stream = typeof(PropertyData).Assembly.GetManifestResourceStream("UAssetAPI.git_commit.txt"))
-            {
-                if (stream != null)
+                string gitVersionAPI = string.Empty;
+                using (Stream stream = typeof(PropertyData).Assembly.GetManifestResourceStream("UAssetAPI.git_commit.txt"))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    if (stream != null)
                     {
-                        if (reader != null) gitVersionAPI = reader.ReadToEnd().Trim();
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            if (reader != null) gitVersionAPI = reader.ReadToEnd().Trim();
+                        }
                     }
                 }
-            }
 
-            if (!gitVersionAPI.All("0123456789abcdef".Contains)) gitVersionAPI = string.Empty;
+                if (!gitVersionAPI.All("0123456789abcdef".Contains)) gitVersionAPI = string.Empty;
 
-            if (!string.IsNullOrEmpty(gitVersionGUI))
-            {
-                UAGUtils._displayVersion += " (" + gitVersionGUI;
-                if (!string.IsNullOrEmpty(gitVersionAPI))
+                if (!string.IsNullOrEmpty(gitVersionGUI))
                 {
-                    UAGUtils._displayVersion += " - " + gitVersionAPI;
+                    UAGUtils._displayVersion += " (" + gitVersionGUI;
+                    if (!string.IsNullOrEmpty(gitVersionAPI))
+                    {
+                        UAGUtils._displayVersion += " - " + gitVersionAPI;
+                    }
+                    UAGUtils._displayVersion += ")";
                 }
-                UAGUtils._displayVersion += ")";
-            }
 
-            this.Text = DisplayVersion;
-            this.AllowDrop = true;
-            dataGridView1.Visible = true;
+                this.Text = DisplayVersion;
+                this.AllowDrop = true;
+                dataGridView1.Visible = true;
 
-            // Extra data viewer
-            byteView1 = new ByteViewer
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                AutoSize = true,
-                Visible = false
-            };
-            splitContainer1.Panel2.Controls.Add(byteView1);
-
-            jsonView = new TextBox
-            {
-                Dock = DockStyle.Fill,
-                Visible = false,
-                AutoSize = true,
-                Multiline = true,
-                ReadOnly = true,
-                MaxLength = int.MaxValue,
-                ScrollBars = ScrollBars.Both,
-            };
-            splitContainer1.Panel2.Controls.Add(jsonView);
-
-            jsonView.TextChanged += (object sender, EventArgs e) => { if (tableEditor == null) return; tableEditor.dirtySinceLastLoad = true; SetUnsavedChanges(true); };
-
-            importBinaryData.Visible = false;
-            exportBinaryData.Visible = false;
-            setBinaryData.Visible = false;
-
-            // Enable double buffering to look nicer
-            if (!SystemInformation.TerminalServerSession)
-            {
-                Type ourGridType = dataGridView1.GetType();
-                PropertyInfo pi = ourGridType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-                pi.SetValue(dataGridView1, true, null);
-            }
-
-            // Auto resizing
-            SizeChanged += frm_sizeChanged;
-            FormClosing += frm_closing;
-
-            // position of ByteViewer buttons depends on splitter location so resize if splitter moves
-            splitContainer1.SplitterMoved += (sender, e) => { ForceResize(); };
-
-            // Drag-and-drop support
-            DragEnter += new DragEventHandler(frm_DragEnter);
-            DragDrop += new DragEventHandler(frm_DragDrop);
-
-            dataGridView1.MouseWheel += dataGridView1_MouseWheel;
-            //dataGridView1.EditMode = UAGConfig.Data.DoubleClickToEdit ? DataGridViewEditMode.EditProgrammatically : DataGridViewEditMode.EditOnEnter;
-
-            menuStrip1.Renderer = new UAGMenuStripRenderer();
-            foreach (ToolStripMenuItem entry in menuStrip1.Items)
-            {
-                entry.DropDownOpened += (sender, args) =>
+                // Extra data viewer
+                byteView1 = new ByteViewer
                 {
-                    isDropDownOpened[entry] = true;
+                    Dock = DockStyle.Fill,
+                    AutoScroll = true,
+                    AutoSize = true,
+                    Visible = false
                 };
-                entry.DropDownClosed += (sender, args) =>
+                splitContainer1.Panel2.Controls.Add(byteView1);
+
+                jsonView = new TextBox
                 {
-                    isDropDownOpened[entry] = false;
+                    Dock = DockStyle.Fill,
+                    Visible = false,
+                    AutoSize = true,
+                    Multiline = true,
+                    ReadOnly = true,
+                    MaxLength = int.MaxValue,
+                    ScrollBars = ScrollBars.Both,
                 };
+                splitContainer1.Panel2.Controls.Add(jsonView);
+
+                jsonView.TextChanged += (object sender, EventArgs e) => { if (tableEditor == null) return; tableEditor.dirtySinceLastLoad = true; SetUnsavedChanges(true); };
+
+                importBinaryData.Visible = false;
+                exportBinaryData.Visible = false;
+                setBinaryData.Visible = false;
+
+                // Enable double buffering to look nicer
+                if (!SystemInformation.TerminalServerSession)
+                {
+                    Type ourGridType = dataGridView1.GetType();
+                    PropertyInfo pi = ourGridType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+                    pi.SetValue(dataGridView1, true, null);
+                }
+
+                // Auto resizing
+                SizeChanged += frm_sizeChanged;
+                FormClosing += frm_closing;
+
+                // position of ByteViewer buttons depends on splitter location so resize if splitter moves
+                splitContainer1.SplitterMoved += (sender, e) => { ForceResize(); };
+                splitContainer1.SplitterDistance = UAGPalette.InitialSplitterDistance;
+
+                // Drag-and-drop support
+                DragEnter += new DragEventHandler(frm_DragEnter);
+                DragDrop += new DragEventHandler(frm_DragDrop);
+
+                dataGridView1.MouseWheel += dataGridView1_MouseWheel;
+                //dataGridView1.EditMode = UAGConfig.Data.DoubleClickToEdit ? DataGridViewEditMode.EditProgrammatically : DataGridViewEditMode.EditOnEnter;
+
+                menuStrip1.Renderer = new UAGMenuStripRenderer();
+                foreach (ToolStripMenuItem entry in menuStrip1.Items)
+                {
+                    entry.DropDownOpened += (sender, args) =>
+                    {
+                        isDropDownOpened[entry] = true;
+                    };
+                    entry.DropDownClosed += (sender, args) =>
+                    {
+                        isDropDownOpened[entry] = false;
+                    };
+                }
+
+                ac7decrypt = new AC7Decrypt();
+
+                UpdateRPC();
             }
-
-            ac7decrypt = new AC7Decrypt();
-
-            UpdateRPC();
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occured while initializing!\n" + ex.GetType() + ": " + ex.Message + "\n\nUAssetGUI will now close.", "UAssetGUI");
+                Environment.Exit(1); // kill the process
+            }
         }
 
         private static Dictionary<ToolStripItem, bool> isDropDownOpened = new Dictionary<ToolStripItem, bool>();
@@ -221,13 +230,20 @@ namespace UAssetGUI
 
                 string initialSelection = newSelection == null ? (allMappingsKeys.Contains(UAGConfig.Data.PreferredMappings) ? UAGConfig.Data.PreferredMappings : allMappingsKeys[0]) : newSelection;
 
+                bool success = false;
                 for (int i = 0; i < allMappingsKeys.Count; i++)
                 {
                     if (allMappingsKeys[i] == initialSelection)
                     {
                         comboSpecifyMappings.SelectedIndex = i;
+                        success = true;
                         break;
                     }
+                }
+
+                if (!success)
+                {
+                    comboSpecifyMappings.SelectedIndex = 0;
                 }
 
                 UpdateComboSpecifyMappings(alsoCheckVersion);
@@ -387,10 +403,17 @@ namespace UAssetGUI
             if (args.Length > 1)
             {
                 EngineVersion selectedVer = EngineVersion.UNKNOWN;
-                if (args.Length > 2 && !Enum.TryParse(args[2], out selectedVer))
+
+                if (args.Length > 2)
                 {
-                    if (int.TryParse(args[2], out int selectedVerRaw)) selectedVer = (EngineVersion)selectedVerRaw;
+                    if (int.TryParse(args[2], out int selectedVerRaw)) selectedVer = EngineVersion.VER_UE4_0 + selectedVerRaw;
+                    else Enum.TryParse(args[2], out selectedVer);
                 }
+                if (args.Length > 3)
+                {
+                    UpdateMappings(args[3]);
+                }
+
                 if (selectedVer > EngineVersion.UNKNOWN) SetParsingVersion(selectedVer);
                 LoadFileAt(args[1]);
             }
@@ -462,8 +485,13 @@ namespace UAssetGUI
             return res;
         }
 
-        public DateTime LastLoadTimestamp = DateTime.UtcNow;
         public void LoadFileAt(string filePath)
+        {
+            UAGUtils.InvokeUI(() => LoadFileAtInternal(filePath));
+        }
+
+        public DateTime LastLoadTimestamp = DateTime.UtcNow;
+        private void LoadFileAtInternal(string filePath)
         {
             dataGridView1.Visible = true;
             byteView1.Visible = false;
@@ -556,6 +584,7 @@ namespace UAssetGUI
                         targetAsset = new UAsset(ParsingVersion);
                         targetAsset.FilePath = filePath;
                         targetAsset.Mappings = ParsingMappings;
+                        targetAsset.CustomSerializationFlags = (CustomSerializationFlags)UAGConfig.Data.CustomSerializationFlags;
                         if (MapStructTypeOverrideForm.MapStructTypeOverride != null) targetAsset.MapStructTypeOverride = MapStructTypeOverrideForm.MapStructTypeOverride;
 
                         var strmRaw = targetAsset.PathToStream(filePath);
@@ -617,7 +646,11 @@ namespace UAssetGUI
                 if (jsonTracingPath != null && (failedToMaintainBinaryEquality || failedCategoryCount > 0))
                 {
                     // if ser-hex-viewer available (https://github.com/trumank/ser-hex), run that
-                    Process.Start(new ProcessStartInfo("ser-hex-viewer", "\"" + jsonTracingPath + "\"") { UseShellExecute = false });
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo("ser-hex-viewer", "\"" + jsonTracingPath + "\"") { UseShellExecute = false });
+                    }
+                    catch { }
                 }
 #endif
 
@@ -671,6 +704,12 @@ namespace UAssetGUI
             }
             catch (Exception ex)
             {
+                string formattedListOfFailedToAccessAssets = null;
+                if (tableEditor?.asset != null && tableEditor.asset.HasUnversionedProperties && (tableEditor.asset.OtherAssetsFailedToAccess?.Count ?? 0) > 0)
+                {
+                    formattedListOfFailedToAccessAssets = string.Join("\n", tableEditor.asset.OtherAssetsFailedToAccess);
+                }
+
                 //MessageBox.Show(ex.StackTrace);
                 currentSavingPath = "";
                 SetUnsavedChanges(false);
@@ -684,6 +723,7 @@ namespace UAssetGUI
                 dataGridView1.Columns.Clear();
                 dataGridView1.Rows.Clear();
                 UAGPalette.RefreshTheme(this);
+
                 switch (ex)
                 {
                     case IOException _:
@@ -699,13 +739,18 @@ namespace UAssetGUI
                         MessageBox.Show("Encountered an unknown error when trying to open this file!\n" + ex.GetType() + ": " + ex.Message, "Uh oh!");
                         break;
                 }
+
+                if (formattedListOfFailedToAccessAssets != null)
+                {
+                    MessageBox.Show("UAssetAPI attempted to access the following assets, but failed to do so. It's possible that this error could be resolved by giving it access to these assets. You can either include them in the same directory, or reconstruct the game's Content directory tree.\n\n" + formattedListOfFailedToAccessAssets, "Notice");
+                }
             }
             finally
             {
                 LastLoadTimestamp = DateTime.UtcNow;
                 UpdateRPC();
 
-                UAGUtils.InvokeUI(treeView1.Select);
+                treeView1.Select();
             }
         }
 
@@ -895,6 +940,12 @@ namespace UAssetGUI
                             Clipboard.SetText(string.IsNullOrWhiteSpace(parsedData) ? "zero" : parsedData);
                             return;
                         }
+                        else if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                        {
+                            string parsedData = BitConverter.ToString(((StructExport)pointerNode.Pointer).ScriptBytecodeRaw)?.Replace("-", " ");
+                            Clipboard.SetText(string.IsNullOrWhiteSpace(parsedData) ? "zero" : parsedData);
+                            return;
+                        }
                         else if (pointerNode.Pointer is StructPropertyData copyingDat1)
                         {
                             if (treeView1.Focused) objectToCopy = copyingDat1;
@@ -1023,6 +1074,24 @@ namespace UAssetGUI
                             }
                             return;
                         }
+                        else if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                        {
+                            try
+                            {
+                                ((StructExport)pointerNode.Pointer).ScriptBytecodeRaw = Clipboard.GetText() == "zero" ? new byte[0] : UAPUtils.ConvertHexStringToByteArray(Clipboard.GetText());
+                            }
+                            catch (Exception)
+                            {
+                                // the thing we're trying to paste probably isn't a byte array
+                            }
+
+                            SetUnsavedChanges(true);
+                            if (tableEditor != null)
+                            {
+                                tableEditor.Load();
+                            }
+                            return;
+                        }
                         else if (pointerNode.Pointer is StructPropertyData copyingDat1 && deserializedClipboard != null)
                         {
                             if (rowIndex < 0) return;
@@ -1132,6 +1201,12 @@ namespace UAssetGUI
                             {
                                 ((NormalExport)pointerNode.Pointer).Extras = new byte[0];
                             }
+
+                            return;
+                        }
+                        else if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                        {
+                            ((StructExport)pointerNode.Pointer).ScriptBytecodeRaw = new byte[0];
 
                             return;
                         }
@@ -1284,6 +1359,9 @@ namespace UAssetGUI
                     case "Name Map":
                         tableEditor.mode = TableHandlerMode.NameMap;
                         break;
+                    case "Soft Object Paths":
+                        tableEditor.mode = TableHandlerMode.SoftObjectPathList;
+                        break;
                     case "Import Data":
                         tableEditor.mode = TableHandlerMode.Imports;
                         break;
@@ -1315,7 +1393,7 @@ namespace UAssetGUI
 
         private void treeView1_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
-            if (tableEditor.dirtySinceLastLoad)
+            if (tableEditor != null && tableEditor.dirtySinceLastLoad)
             {
                 // force refresh before tabbing out if we need to finalize changes before serialization (typically, when null entries exist to get rid of)
                 // we don't just do this every time for performance reasons
@@ -1697,10 +1775,14 @@ namespace UAssetGUI
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    if (treeView1.SelectedNode is PointingTreeNode pointerNode && pointerNode.Type == PointingTreeNodeType.ByteArray)
+                    if (treeView1.SelectedNode is PointingTreeNode pointerNode && (pointerNode.Type == PointingTreeNodeType.ByteArray || pointerNode.Type == PointingTreeNodeType.KismetByteArray))
                     {
                         byte[] rawData = File.ReadAllBytes(openFileDialog.FileName);
-                        if (pointerNode.Pointer is NormalExport usCategory)
+                        if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                        {
+                            ((StructExport)pointerNode.Pointer).ScriptBytecodeRaw = rawData;
+                        }
+                        else if (pointerNode.Pointer is NormalExport usCategory)
                         {
                             usCategory.Extras = rawData;
                         }
@@ -1730,10 +1812,14 @@ namespace UAssetGUI
                 DialogResult res = dialog.ShowDialog();
                 if (res == DialogResult.OK)
                 {
-                    if (treeView1.SelectedNode is PointingTreeNode pointerNode && pointerNode.Type == PointingTreeNodeType.ByteArray)
+                    if (treeView1.SelectedNode is PointingTreeNode pointerNode && (pointerNode.Type == PointingTreeNodeType.ByteArray || pointerNode.Type == PointingTreeNodeType.KismetByteArray))
                     {
                         byte[] rawData = new byte[0];
-                        if (pointerNode.Pointer is NormalExport usCategory)
+                        if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                        {
+                            rawData = ((StructExport)pointerNode.Pointer).ScriptBytecodeRaw;
+                        }
+                        else if (pointerNode.Pointer is NormalExport usCategory)
                         {
                             rawData = usCategory.Extras;
                         }
@@ -1759,9 +1845,13 @@ namespace UAssetGUI
 
             if (replacementPrompt.ShowDialog(this) == DialogResult.OK)
             {
-                if (int.TryParse(replacementPrompt.OutputText, out int numBytes) && treeView1.SelectedNode is PointingTreeNode pointerNode && pointerNode.Type == PointingTreeNodeType.ByteArray)
+                if (int.TryParse(replacementPrompt.OutputText, out int numBytes) && treeView1.SelectedNode is PointingTreeNode pointerNode && (pointerNode.Type == PointingTreeNodeType.ByteArray || pointerNode.Type == PointingTreeNodeType.KismetByteArray))
                 {
-                    if (pointerNode.Pointer is NormalExport usCategory)
+                    if (pointerNode.Type == PointingTreeNodeType.KismetByteArray)
+                    {
+                        ((StructExport)pointerNode.Pointer).ScriptBytecodeRaw = new byte[numBytes];
+                    }
+                    else if (pointerNode.Pointer is NormalExport usCategory)
                     {
                         usCategory.Extras = new byte[numBytes];
                     }
@@ -1809,11 +1899,21 @@ namespace UAssetGUI
         private readonly HashSet<string> invalidBaseFolders = new HashSet<string>() { "AIModule", "ALAudio", "AVEncoder", "AVIWriter", "Advertising", "Analytics", "Android", "AnimGraphRuntime", "AnimationCore", "AppFramework", "Apple", "ApplicationCore", "AssetRegistry", "AudioAnalyzer", "AudioCaptureCore", "AudioCaptureImplementations", "AudioExtensions", "AudioMixer", "AudioMixerCore", "AudioPlatformConfiguration", "AugmentedReality", "AutomationMessages", "AutomationWorker", "BlueprintRuntime", "BuildSettings", "CEF3Utils", "CUDA/Source", "Cbor", "CinematicCamera", "ClientPilot", "ClothingSystemRuntimeCommon", "ClothingSystemRuntimeInterface", "ClothingSystemRuntimeNv", "CookedIterativeFile", "Core", "CoreUObject", "CrashReportCore", "CrunchCompression", "D3D12RHI", "Datasmith", "DeveloperSettings", "EmptyRHI", "Engine", "EngineMessages", "EngineSettings", "Experimental", "ExternalRPCRegistry", "EyeTracker", "Foliage", "FriendsAndChat", "GameMenuBuilder", "GameplayMediaEncoder", "GameplayTags", "GameplayTasks", "HardwareSurvey", "HeadMountedDisplay", "IESFile", "IOS", "IPC", "ImageCore", "ImageWrapper", "ImageWriteQueue", "InputCore", "InputDevice", "InstallBundleManager", "Json", "JsonUtilities", "Landscape", "Launch", "LevelSequence", "Linux/AudioMixerSDL", "LiveLinkInterface", "LiveLinkMessageBusFramework", "Lumin/LuminRuntimeSettings", "MRMesh", "Mac", "MaterialShaderQualitySettings", "Media", "MediaAssets", "MediaInfo", "MediaUtils", "MeshDescription", "MeshUtilitiesCommon", "Messaging", "MessagingCommon", "MessagingRpc", "MoviePlayer", "MovieScene", "MovieSceneCapture", "MovieSceneTracks", "NVidia/GeForceNOW", "NavigationSystem", "Navmesh", "Net", "NetworkFile", "NetworkFileSystem", "NetworkReplayStreaming", "Networking", "NonRealtimeAudioRenderer", "NullDrv", "NullInstallBundleManager", "Online", "OpenGLDrv", "Overlay", "PacketHandlers", "PakFile", "PerfCounters", "PhysXCooking", "PhysicsCore", "PlatformThirdPartyHelpers/PosixShim", "Portal", "PreLoadScreen", "Projects", "PropertyAccess", "PropertyPath", "RHI", "RSA", "RawMesh", "RenderCore", "Renderer", "RigVM", "RuntimeAssetCache", "SandboxFile", "Serialization", "SessionMessages", "SessionServices", "SignalProcessing", "Slate", "SlateCore", "SlateNullRenderer", "SlateRHIRenderer", "Sockets", "SoundFieldRendering", "StaticMeshDescription", "StreamingFile", "StreamingPauseRendering", "SynthBenchmark", "TimeManagement", "Toolbox", "TraceLog", "UE4Game", "UELibrary", "UMG", "Unix/UnixCommonStartup", "UnrealAudio", "VectorVM", "VirtualProduction/StageDataCore", "VulkanRHI", "WebBrowser", "WebBrowserTexture", "WidgetCarousel", "Windows", "XmlParser" };
         private readonly HashSet<string> invalidExtraFolders = new HashSet<string>() { "AkAudio", "ClothingSystemRuntime", "SQEXSEAD" };
         private readonly string PROJECT_NAME_PREFIX = "/Script/";
+        private readonly string CONTENT_NAME_PREFIX = "/Game/";
         private string GetProjectName()
         {
             if (tableEditor?.asset == null) return null;
             if (UAGConfig.Data.PreferredMappings != "No mappings" && UAGConfig.Data.PreferredMappings != "Mappings") return UAGConfig.Data.PreferredMappings;
 
+            // use PackageName if available
+            string pName = tableEditor.asset.FolderName?.Value;
+            if (pName != null && pName.StartsWith(CONTENT_NAME_PREFIX))
+            {
+                string[] pName_inside = pName.Substring(CONTENT_NAME_PREFIX.Length, pName.Length - CONTENT_NAME_PREFIX.Length).Split('/');
+                if (pName_inside.Length > 0) return pName_inside[0];
+            }
+
+            // check for C++ module name (not great)
             List<string> validPossibleProjectNames = new List<string>();
             var allPossibleFNames = tableEditor.asset.GetNameMapIndexList();
             foreach (FString n in allPossibleFNames)
@@ -2052,14 +2152,25 @@ namespace UAssetGUI
 
                 if (inPath == null) return;
 
+                bool success = true;
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
-                var thing = new SaveGame(inPath);
-                thing.PatchUsmap(patchPath);
-                timer.Stop();
-                UpdateMappings();
-
-                MessageBox.Show("Operation completed in " + timer.ElapsedMilliseconds + " ms.", this.Text);
+                try
+                {
+                    var thing = new SaveGame(inPath);
+                    thing.PatchUsmap(patchPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to patch mappings! " + ex.GetType() + ": " + ex.Message, "Uh oh!");
+                    success = false;
+                }
+                finally
+                {
+                    timer.Stop();
+                    UpdateMappings();
+                    if (success) MessageBox.Show("Operation completed in " + timer.ElapsedMilliseconds + " ms.", this.Text);
+                }
             });
         }
 

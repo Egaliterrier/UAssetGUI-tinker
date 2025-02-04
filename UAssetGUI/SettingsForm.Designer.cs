@@ -45,7 +45,11 @@
             restoreSize = new System.Windows.Forms.CheckBox();
             enableUpdateNotice = new System.Windows.Forms.CheckBox();
             enablePrettyBytecode = new System.Windows.Forms.CheckBox();
+            label4 = new System.Windows.Forms.Label();
+            customSerializationFlagsBox = new System.Windows.Forms.CheckedListBox();
+            pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // infoLabel
@@ -55,7 +59,7 @@
             infoLabel.Location = new System.Drawing.Point(15, 10);
             infoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             infoLabel.Name = "infoLabel";
-            infoLabel.Size = new System.Drawing.Size(354, 46);
+            infoLabel.Size = new System.Drawing.Size(392, 46);
             infoLabel.TabIndex = 1;
             infoLabel.Text = "Settings:";
             infoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -66,7 +70,7 @@
             closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             closeButton.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             closeButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            closeButton.Location = new System.Drawing.Point(281, 295);
+            closeButton.Location = new System.Drawing.Point(319, 313);
             closeButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             closeButton.Name = "closeButton";
             closeButton.Size = new System.Drawing.Size(88, 30);
@@ -79,7 +83,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            label1.Location = new System.Drawing.Point(65, 72);
+            label1.Location = new System.Drawing.Point(72, 72);
             label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(53, 16);
@@ -90,7 +94,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            label2.Location = new System.Drawing.Point(15, 102);
+            label2.Location = new System.Drawing.Point(22, 102);
             label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(96, 16);
@@ -103,7 +107,7 @@
             aboutButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             aboutButton.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold);
             aboutButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            aboutButton.Location = new System.Drawing.Point(14, 295);
+            aboutButton.Location = new System.Drawing.Point(14, 313);
             aboutButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             aboutButton.Name = "aboutButton";
             aboutButton.Size = new System.Drawing.Size(88, 30);
@@ -116,26 +120,26 @@
             // 
             themeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             themeComboBox.FormattingEnabled = true;
-            themeComboBox.Location = new System.Drawing.Point(135, 70);
+            themeComboBox.Location = new System.Drawing.Point(142, 70);
             themeComboBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             themeComboBox.Name = "themeComboBox";
-            themeComboBox.Size = new System.Drawing.Size(200, 23);
+            themeComboBox.Size = new System.Drawing.Size(252, 23);
             themeComboBox.TabIndex = 8;
             themeComboBox.SelectedIndexChanged += themeComboBox_SelectedIndexChanged;
             // 
             // favoriteThingBox
             // 
-            favoriteThingBox.Location = new System.Drawing.Point(135, 100);
+            favoriteThingBox.Location = new System.Drawing.Point(142, 100);
             favoriteThingBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             favoriteThingBox.Name = "favoriteThingBox";
-            favoriteThingBox.Size = new System.Drawing.Size(200, 23);
+            favoriteThingBox.Size = new System.Drawing.Size(252, 23);
             favoriteThingBox.TabIndex = 9;
             favoriteThingBox.TextChanged += favoriteThingBox_TextChanged;
             // 
             // valuesOnScroll
             // 
             valuesOnScroll.AutoSize = true;
-            valuesOnScroll.Location = new System.Drawing.Point(195, 173);
+            valuesOnScroll.Location = new System.Drawing.Point(215, 198);
             valuesOnScroll.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             valuesOnScroll.Name = "valuesOnScroll";
             valuesOnScroll.Size = new System.Drawing.Size(151, 19);
@@ -146,10 +150,10 @@
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Location = new System.Drawing.Point(135, 130);
+            numericUpDown1.Location = new System.Drawing.Point(142, 130);
             numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new System.Drawing.Size(201, 23);
+            numericUpDown1.Size = new System.Drawing.Size(252, 23);
             numericUpDown1.TabIndex = 11;
             numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
             // 
@@ -157,7 +161,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            label3.Location = new System.Drawing.Point(75, 130);
+            label3.Location = new System.Drawing.Point(82, 130);
             label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(45, 16);
@@ -167,7 +171,7 @@
             // enableDiscordRpc
             // 
             enableDiscordRpc.AutoSize = true;
-            enableDiscordRpc.Location = new System.Drawing.Point(29, 173);
+            enableDiscordRpc.Location = new System.Drawing.Point(29, 198);
             enableDiscordRpc.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             enableDiscordRpc.Name = "enableDiscordRpc";
             enableDiscordRpc.Size = new System.Drawing.Size(129, 19);
@@ -179,7 +183,7 @@
             // enableDynamicTree
             // 
             enableDynamicTree.AutoSize = true;
-            enableDynamicTree.Location = new System.Drawing.Point(29, 226);
+            enableDynamicTree.Location = new System.Drawing.Point(29, 251);
             enableDynamicTree.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             enableDynamicTree.Name = "enableDynamicTree";
             enableDynamicTree.Size = new System.Drawing.Size(133, 19);
@@ -191,7 +195,7 @@
             // doubleClickToEdit
             // 
             doubleClickToEdit.AutoSize = true;
-            doubleClickToEdit.Location = new System.Drawing.Point(29, 200);
+            doubleClickToEdit.Location = new System.Drawing.Point(29, 225);
             doubleClickToEdit.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             doubleClickToEdit.Name = "doubleClickToEdit";
             doubleClickToEdit.Size = new System.Drawing.Size(128, 19);
@@ -203,7 +207,7 @@
             // enableBak
             // 
             enableBak.AutoSize = true;
-            enableBak.Location = new System.Drawing.Point(195, 200);
+            enableBak.Location = new System.Drawing.Point(215, 225);
             enableBak.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             enableBak.Name = "enableBak";
             enableBak.Size = new System.Drawing.Size(110, 19);
@@ -215,7 +219,7 @@
             // restoreSize
             // 
             restoreSize.AutoSize = true;
-            restoreSize.Location = new System.Drawing.Point(195, 226);
+            restoreSize.Location = new System.Drawing.Point(215, 251);
             restoreSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             restoreSize.Name = "restoreSize";
             restoreSize.Size = new System.Drawing.Size(156, 19);
@@ -227,7 +231,7 @@
             // enableUpdateNotice
             // 
             enableUpdateNotice.AutoSize = true;
-            enableUpdateNotice.Location = new System.Drawing.Point(29, 253);
+            enableUpdateNotice.Location = new System.Drawing.Point(29, 278);
             enableUpdateNotice.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             enableUpdateNotice.Name = "enableUpdateNotice";
             enableUpdateNotice.Size = new System.Drawing.Size(137, 19);
@@ -239,7 +243,7 @@
             // enablePrettyBytecode
             // 
             enablePrettyBytecode.AutoSize = true;
-            enablePrettyBytecode.Location = new System.Drawing.Point(195, 251);
+            enablePrettyBytecode.Location = new System.Drawing.Point(215, 276);
             enablePrettyBytecode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             enablePrettyBytecode.Name = "enablePrettyBytecode";
             enablePrettyBytecode.Size = new System.Drawing.Size(147, 19);
@@ -248,11 +252,47 @@
             enablePrettyBytecode.UseVisualStyleBackColor = true;
             enablePrettyBytecode.CheckedChanged += enablePrettyBytecode_CheckedChanged;
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            label4.Location = new System.Drawing.Point(82, 161);
+            label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(44, 16);
+            label4.TabIndex = 21;
+            label4.Text = "Flags:";
+            // 
+            // customSerializationFlagsBox
+            // 
+            customSerializationFlagsBox.CheckOnClick = true;
+            customSerializationFlagsBox.FormattingEnabled = true;
+            customSerializationFlagsBox.Location = new System.Drawing.Point(142, 161);
+            customSerializationFlagsBox.Name = "customSerializationFlagsBox";
+            customSerializationFlagsBox.ScrollAlwaysVisible = true;
+            customSerializationFlagsBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            customSerializationFlagsBox.Size = new System.Drawing.Size(252, 22);
+            customSerializationFlagsBox.TabIndex = 22;
+            customSerializationFlagsBox.Click += customSerializationFlagsBox_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new System.Drawing.Point(6, 10);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new System.Drawing.Size(61, 78);
+            pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 23;
+            pictureBox1.TabStop = false;
+            pictureBox1.Visible = false;
+            // 
             // SettingsForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(383, 333);
+            ClientSize = new System.Drawing.Size(421, 351);
+            Controls.Add(pictureBox1);
+            Controls.Add(customSerializationFlagsBox);
+            Controls.Add(label4);
             Controls.Add(enablePrettyBytecode);
             Controls.Add(enableUpdateNotice);
             Controls.Add(restoreSize);
@@ -277,6 +317,7 @@
             FormClosing += SettingsForm_FormClosing;
             Load += SettingsForm_Load;
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -289,10 +330,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button aboutButton;
         private System.Windows.Forms.ComboBox themeComboBox;
-        private System.Windows.Forms.TextBox favoriteThingBox;
         private System.Windows.Forms.CheckBox valuesOnScroll;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox enableDiscordRpc;
         private System.Windows.Forms.CheckBox enableDynamicTree;
         private System.Windows.Forms.CheckBox doubleClickToEdit;
@@ -300,5 +338,11 @@
         private System.Windows.Forms.CheckBox restoreSize;
         private System.Windows.Forms.CheckBox enableUpdateNotice;
         private System.Windows.Forms.CheckBox enablePrettyBytecode;
+        internal System.Windows.Forms.NumericUpDown numericUpDown1;
+        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.TextBox favoriteThingBox;
+        internal System.Windows.Forms.CheckedListBox customSerializationFlagsBox;
+        internal System.Windows.Forms.Label label4;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
