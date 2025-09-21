@@ -9,10 +9,10 @@
     <Grid Margin="{Binding Padding, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <c:PropertyItemsControl Grid.Row="1" x:Name="ItemsControl" Padding="{Binding Padding, RelativeSource={RelativeSource AncestorType=UserControl}}" AlternationCount="2">
+        <c:PropertyItemsControl x:Name="ItemsControl" Padding="{Binding Padding, RelativeSource={RelativeSource AncestorType=UserControl}}" AlternationCount="2">
             <c:PropertyItemsControl.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.ContainerStyle>
@@ -41,44 +41,8 @@
                     </ScrollViewer>
                 </ControlTemplate>
             </c:PropertyItemsControl.Template>
-            <c:PropertyItemsControl.ItemContainerStyle>
-                <Style TargetType="c:PropertyItem">
-                    <Setter Property="Focusable" Value="False" />
-                    <Setter Property="Margin" Value="0,0,0,1" />
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Padding" Value="4,2" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="c:PropertyItem">
-                                <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource BorderBrush}">
-                                    <Grid Margin="6,2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" SharedSizeGroup="PropertyLabel" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Foreground="{DynamicResource Foreground}" Margin="0 0 5 0" Opacity="0.9"
-                                                       Text="{TemplateBinding PropertyName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" 
-                                                       ToolTip="{TemplateBinding Description}" ToolTipService.InitialShowDelay="100" />
-                                        <ContentPresenter Grid.Column="1" ContentSource="EditorElement" VerticalAlignment="Center" />
-                                    </Grid>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#10FFFFFF" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#203A86FF" />
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#08000000" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </c:PropertyItemsControl.ItemContainerStyle>
         </c:PropertyItemsControl>
+
+        <Button Grid.Row="1" Content="Add" HorizontalAlignment="Left" Padding="10 3" Click="AddProperty_Click" />
     </Grid>
 </UserControl>

@@ -10,6 +10,18 @@ using UAssetAPI.UnrealTypes;
 namespace UAssetManager.Controls.Editors;
 public partial class ArrayEditor
 {
+    #region Constructor
+    public ArrayEditor()
+    {
+        InitializeComponent();
+    }
+
+    public ArrayEditor(UAsset asset) : this()
+    {
+        Asset = asset;
+    }
+    #endregion
+
     #region Propertirs
     public static readonly DependencyProperty AssetProperty = DependencyProperty.Register(
         nameof(Asset), typeof(UAsset), typeof(ArrayEditor), new PropertyMetadata(default(UAsset)));
@@ -37,16 +49,6 @@ public partial class ArrayEditor
     #endregion
 
     #region Methods
-    public ArrayEditor()
-    {
-        InitializeComponent();
-    }
-
-    public ArrayEditor(UAsset asset) : this()
-    {
-        Asset = asset;
-    }
-
     private void MoreButton_Click(object sender, EventArgs e)
     {
         if (sender is FrameworkElement fe &&
@@ -197,14 +199,12 @@ public class ArrayPropertyEditor(UAsset asset) : PropertyEditorBase, IValueConve
     {
         if (value is PropertyData[] array)
         {
-            // �����ԭʼArrayPropertyData��ֱ��ʹ�ò�����Value
             if (parameter is ArrayPropertyData originalArrayProperty)
             {
                 originalArrayProperty.Value = array;
                 return originalArrayProperty;
             }
 
-            // ���򴴽��µ�ArrayPropertyData
             var dummyName = FName.DefineDummy(asset, "Array");
             return new ArrayPropertyData(dummyName) { Value = array };
         }

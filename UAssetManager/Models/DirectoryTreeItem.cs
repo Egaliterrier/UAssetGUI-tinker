@@ -39,17 +39,21 @@ public partial class DirectoryTreeItem : ObservableObject
             var ext = Path.GetExtension(FullPath).ToLower();
             if (ext == ".uasset" || ext == ".umap")
             {
+                MainWindow? window = null;
+
                 foreach (Window w in Application.Current.Windows)
                 {
-                    if (w is MainWindow mw)
-                    {
-                        var asset = TryBuildAssetInMemory();
-                        mw.OpenAssetInEditor(asset, FullPath, isFromBuildPak);
-                        return;
-                    }
+                    if (w is MainWindow mw) window = mw;
                 }
 
-                MessageBox.Show("Main window not found to open asset.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var asset = TryBuildAssetInMemory();
+                if (window is null)
+                {
+                    window = new MainWindow();
+                    window.Show();
+                }
+
+                window.OpenAssetInEditor(asset, FullPath, isFromBuildPak);
             }
             else
             {

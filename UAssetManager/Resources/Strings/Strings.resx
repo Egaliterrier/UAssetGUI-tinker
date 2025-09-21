@@ -202,8 +202,6 @@ Would you like to open the webpage in your browser?</value>
   <data name="Dialog.SaveAssetFile.Title" xml:space="preserve">
     <value>Save UAsset File</value>
   </data>
-
-  <!-- Asset Tree Nodes -->
   <data name="Asset_GeneralInformation" xml:space="preserve">
     <value>General Information</value>
   </data>
@@ -237,8 +235,6 @@ Would you like to open the webpage in your browser?</value>
   <data name="Asset_ExportData" xml:space="preserve">
     <value>Export Data</value>
   </data>
-
-
   <data name="Settings_SaveErrorMessage" xml:space="preserve">
     <value>Error saving settings: {0}</value>
   </data>
@@ -311,9 +307,8 @@ Would you like to open the webpage in your browser?</value>
   <data name="FileContainer_FileAlreadyInBuildMessage" xml:space="preserve">
     <value>This file is already in the build list.</value>
   </data>
-
   <data name="FileContainer_Open" xml:space="preserve">
-    <value>_Open</value>
+    <value>Open</value>
   </data>
   <data name="FileContainer_Paste" xml:space="preserve">
     <value>_Paste</value>
@@ -585,14 +580,12 @@ Would you like to open the webpage in your browser?</value>
   <data name="Menu.View" xml:space="preserve">
     <value>_View</value>
   </data>
-
   <data name="ObjectReferenceDialog.CountFormat" xml:space="preserve">
     <value>{0} items</value>
   </data>
   <data name="ObjectReferenceDialog.EmptyReference" xml:space="preserve">
     <value>Empty reference</value>
   </data>
-
   <data name="ObjectReferenceDialog.Search" xml:space="preserve">
     <value>Search</value>
   </data>
@@ -629,7 +622,6 @@ Would you like to open the webpage in your browser?</value>
   <data name="Settings_About" xml:space="preserve">
     <value>About...</value>
   </data>
-
   <data name="Settings_ChangeValuesOnScroll" xml:space="preserve">
     <value>Change values on scroll</value>
   </data>
@@ -666,7 +658,6 @@ Would you like to open the webpage in your browser?</value>
   <data name="Settings_Language" xml:space="preserve">
     <value>Language</value>
   </data>
-
   <data name="Settings_Other" xml:space="preserve">
     <value>Other Settings</value>
   </data>
@@ -735,9 +726,6 @@ Would you like to open the webpage in your browser?</value>
   </data>
   <data name="FileContainer_Title" xml:space="preserve">
     <value>PAK Manager</value>
-  </data>
-  <data name="FileContainer_Open" xml:space="preserve">
-    <value>Open</value>
   </data>
   <data name="FileContainer_Current" xml:space="preserve">
     <value>Current</value>
@@ -838,7 +826,6 @@ Would you like to open the webpage in your browser?</value>
   <data name="Tooltip.BrowseObject" xml:space="preserve">
     <value>Browse object reference</value>
   </data>
-
   <data name="Tooltip.Color" xml:space="preserve">
     <value>Enter color values, format: r,g,b,a (e.g.: 255,128,64,255)</value>
   </data>
@@ -913,5 +900,17 @@ Would you like to open the webpage in your browser?</value>
   </data>
   <data name="MainWindow_Paste_FailedStatus" xml:space="preserve">
     <value>Paste operation failed</value>
+  </data>
+  <data name="AddPropertyDialog.Title" xml:space="preserve">
+    <value>Add property</value>
+  </data>
+  <data name="AddPropertyDialog.PropertyName" xml:space="preserve">
+    <value>Property Name</value>
+  </data>
+  <data name="AddPropertyDialog.PropertyValue" xml:space="preserve">
+    <value>Property Value</value>
+  </data>
+  <data name="AddPropertyDialog.PropertyType" xml:space="preserve">
+    <value>Property Type</value>
   </data>
 </root>

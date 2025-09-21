@@ -5,6 +5,7 @@ using UAssetAPI.PropertyTypes.Objects;
 using UAssetAPI.PropertyTypes.Structs;
 using UAssetAPI.UnrealTypes;
 using UAssetManager.Controls;
+using UAssetManager.Resources;
 
 namespace UAssetManager.Views;
 public partial class AddPropertyDialog : Window
@@ -19,8 +20,8 @@ public partial class AddPropertyDialog : Window
         _asset = asset;
 
         // Preload common types; user can still type freely
-        var common = commonTypeHints ?? new[]
-        {
+        var common = commonTypeHints ??
+        [
             "BoolProperty",
             "IntProperty",
             "FloatProperty",
@@ -39,35 +40,8 @@ public partial class AddPropertyDialog : Window
             "LinearColorProperty",
             "ColorProperty",
             "QuatProperty"
-        };
+        ];
         foreach (var t in common) TypeBox.Items.Add(t);
-
-        TypeBox.LostKeyboardFocus += (_, _) => RefreshEditor();
-        TypeBox.SelectionChanged += (_, _) => RefreshEditor();
-        TypeBox.IsEditable = true;
-        TypeBox.IsTextSearchEnabled = true;
-        TypeBox.IsTextSearchCaseSensitive = false;
-    }
-
-    private void RefreshEditor()
-    {
-        if (string.IsNullOrWhiteSpace(NameBox.Text) || string.IsNullOrWhiteSpace(TypeBox.Text))
-        {
-            EditorHost.Content = null;
-            return;
-        }
-
-        var property = CreatePropertyData(NameBox.Text.Trim(), TypeBox.Text.Trim());
-        if (property == null)
-        {
-            EditorHost.Content = new TextBlock { Text = "不支持的属性类型", VerticalAlignment = VerticalAlignment.Center };
-            return;
-        }
-
-        var editor = PropertyEditor.ResolveEditor(_asset, property);
-        var element = editor.CreateElement(property);
-        editor.CreateBinding(property, element);
-        EditorHost.Content = element;
     }
 
     private PropertyData? CreatePropertyData(string name, string typeText)
@@ -81,7 +55,7 @@ public partial class AddPropertyDialog : Window
             "DoubleProperty" => new DoublePropertyData(fname) { Value = 0.0 },
             "StrProperty" => new StrPropertyData(fname),
             "NameProperty" => new NamePropertyData(fname) { Value = FName.DefineDummy(_asset, "None") },
-            "ByteProperty" => new BytePropertyData(fname) { ByteType = BytePropertyType.Byte, Value = (byte)0 },
+            "ByteProperty" => new BytePropertyData(fname) { ByteType = BytePropertyType.Byte, Value = 0 },
             "EnumProperty" => new BytePropertyData(fname) { ByteType = BytePropertyType.FName, EnumType = FName.DefineDummy(_asset, "None"), EnumValue = FName.DefineDummy(_asset, "None") },
             "ObjectProperty" => new ObjectPropertyData(fname),
             "ArrayProperty" => new ArrayPropertyData(fname),
@@ -97,19 +71,40 @@ public partial class AddPropertyDialog : Window
         };
     }
 
+    private void RefreshEditor(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(NameBox.Text) || string.IsNullOrWhiteSpace(TypeBox.Text))
+        {
+            EditorHost.Content = null;
+            return;
+        }
+
+        var property = CreatePropertyData(NameBox.Text.Trim(), TypeBox.Text.Trim());
+        if (property == null)
+        {
+            EditorHost.Content = new TextBlock { Text = "Unsupported property type", VerticalAlignment = VerticalAlignment.Center };
+            return;
+        }
+
+        var editor = PropertyItem.ResolveEditor(_asset, property);
+        var element = editor.CreateElement(property);
+        editor.CreateBinding(property, element);
+        EditorHost.Content = element;
+    }
+
     private void OkButton_Click(object sender, RoutedEventArgs e)
     {
         var name = NameBox.Text?.Trim();
         var type = TypeBox.Text?.Trim();
         if (string.IsNullOrWhiteSpace(name))
         {
-            MessageBox.Show(this, "请输入属性名称", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, "Enter property name", StringHelper.Get("Text.Information"), MessageBoxButton.OK, MessageBoxImage.Information);
             NameBox.Focus();
             return;
         }
         if (string.IsNullOrWhiteSpace(type))
         {
-            MessageBox.Show(this, "请输入属性类型", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, "Enter property type", StringHelper.Get("Text.Information"), MessageBoxButton.OK, MessageBoxImage.Information);
             TypeBox.Focus();
             return;
         }
@@ -117,7 +112,7 @@ public partial class AddPropertyDialog : Window
         var property = CreatePropertyData(name!, type!);
         if (property == null)
         {
-            MessageBox.Show(this, "不支持的属性类型", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(this, "Unsupported property type", StringHelper.Get("Text.Information"), MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

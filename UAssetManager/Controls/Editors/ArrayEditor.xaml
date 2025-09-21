@@ -43,9 +43,8 @@
                                                 <Run Text="]"/>
                                             </TextBlock>
                                             <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="6 0 50 0">
-                                                <!-- <TextBlock VerticalAlignment="Top" Text="{Binding}" TextTrimming="CharacterEllipsis" /> -->
-                                                <c:PropertyEditor Asset="{Binding Asset,Mode=OneWay}" Source="{Binding PropertyData}" Margin="8,0,0,0" 
-                                                                  Visibility="{Binding IsObjectProperty,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                <c:PropertyItem Asset="{Binding Asset,Mode=OneWay}" Property="{Binding PropertyData}" Margin="8,0,0,0" 
+                                                                Visibility="{Binding IsObjectProperty,Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             </StackPanel>
                                             
                                             <Button x:Name="MoreButton" Grid.Column="2" Content="▾" Width="20" Height="20" ToolTip="More" VerticalAlignment="Top" 
@@ -68,6 +67,8 @@
                                         </Grid>
                                     </Border>
                                 </Expander.Header>
+
+                                <!-- ObjectProperty -->
                                 <Border Padding="6,6,6,8">
                                     <Border.Style>
                                         <Style TargetType="Border">
@@ -78,7 +79,6 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <c:PropertyEditor Asset="{Binding Asset,Mode=OneWay}" Source="{Binding PropertyData}" />
                                 </Border>
                             </Expander>
                         </Border>

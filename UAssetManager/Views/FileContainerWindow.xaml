@@ -58,8 +58,7 @@
                                         <MenuItem Header="{DynamicResource FileContainer_CopyPath}" Command="{Binding Data.CopyPathCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"/>
                                         <Separator/>
                                         <MenuItem Header="{DynamicResource FileContainer_ExtractToFolder}" Command="{Binding Data.ExtractSelectedCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"/>
-                                        <MenuItem Header="{DynamicResource FileContainer_AddToBuild}" Command="{Binding Data.AddFromPakCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}"
-                                                  Visibility="{Binding IsFile, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <MenuItem Header="{DynamicResource FileContainer_AddToBuild}" Command="{Binding Data.AddFromPakCommand, Source={StaticResource Proxy}}" CommandParameter="{Binding}" />
                                     </ContextMenu>
                                 </StackPanel.ContextMenu>
 

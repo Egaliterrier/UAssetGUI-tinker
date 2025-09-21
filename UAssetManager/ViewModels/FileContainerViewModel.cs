@@ -475,9 +475,9 @@ internal partial class FileContainerViewModel : ObservableObject
         if (item == null || _buildPakReader == null) return;
         if (!item.IsFile)
         {
-            MessageBox.Show(StringHelper.Get("FileContainer_SelectFileNodeMessage"), StringHelper.Get("Text.Information"), MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
+            foreach (var child in item.Children) AddFromPak(child.Value);
         }
+
         // Check if any of the game files already exist in build pak
         var existingFiles = new List<string>();
         foreach (var gameFile in item.GameFiles)
