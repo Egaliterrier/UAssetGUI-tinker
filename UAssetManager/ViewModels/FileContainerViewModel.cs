@@ -49,7 +49,7 @@ internal partial class FileContainerViewModel : ObservableObject
 
         if (openFileDialog.ShowDialog() == true)
         {
-            LoadFromPak(openFileDialog.FileName, "0xd2e5f7f94e625efe2726b5360c1039ce7cb9abb760a94f37bb15a6dc08741656");
+            LoadFromPak(openFileDialog.FileName, UAGConfig.Data.AesKey);
         }
     }
 

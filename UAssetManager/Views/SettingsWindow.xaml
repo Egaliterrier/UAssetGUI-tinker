@@ -11,8 +11,8 @@
 
     <Window.Resources>
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
-            <Setter Property="Margin" Value="10,5"/>
-            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="10"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="11"/>
         </Style>
@@ -180,16 +180,18 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
                         <Label Grid.Row="0" Grid.Column="0" Content="{DynamicResource Settings_PreferredVersion}" Style="{StaticResource LabelStyle}"/>
                         <ComboBox Grid.Row="0" Grid.Column="1" x:Name="PreferredVersionComboBox" Style="{StaticResource ComboBoxStyle}"
-                                  ItemsSource="{Binding EngineVersions}"
-                                  SelectedItem="{Binding Config.PreferredVersion}"/>
+                                  ItemsSource="{Binding EngineVersions}" SelectedItem="{Binding Config.PreferredVersion}"/>
                         
                         <Label Grid.Row="1" Grid.Column="0" Content="{DynamicResource Settings_PreferredMappings}" Style="{StaticResource LabelStyle}"/>
-                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="PreferredMappingsTextBox" Style="{StaticResource TextBoxStyle}"
-                                 Text="{Binding Config.PreferredMappings}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="PreferredMappingsTextBox" Style="{StaticResource TextBoxStyle}" Text="{Binding Config.PreferredMappings}"/>
+                                                   
+                        <Label Grid.Row="2" Grid.Column="0" Content="{DynamicResource Settings_AES}" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBoxStyle}" Text="{Binding Config.AesKey}" FontSize="10" />
                     </Grid>
                 </GroupBox>
             </StackPanel>

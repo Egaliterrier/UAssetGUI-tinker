@@ -913,4 +913,7 @@ Would you like to open the webpage in your browser?</value>
   <data name="AddPropertyDialog.PropertyType" xml:space="preserve">
     <value>Property Type</value>
   </data>
+  <data name="Settings_AES" xml:space="preserve">
+    <value>AESKey</value>
+  </data>
 </root>

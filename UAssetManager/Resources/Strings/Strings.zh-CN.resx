@@ -913,4 +913,7 @@
   <data name="AddPropertyDialog.PropertyType" xml:space="preserve">
     <value>属性类型</value>
   </data>
+  <data name="Settings_AES" xml:space="preserve">
+    <value>AES密钥</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using UAssetAPI;
+using UAssetManager.Models;
 using UAssetManager.Pak.Compression;
 using UAssetManager.Pak.Encryption.Aes;
 using UAssetManager.Pak.Exceptions;
@@ -33,7 +34,7 @@ public partial class PakFileReader : AbstractAesVfsReader
 
     public PakFileReader() : base("", new() { Game = EGame.GAME_BladeAndSoul })
     {
-        AesKey = new FAesKey("0xd2e5f7f94e625efe2726b5360c1039ce7cb9abb760a94f37bb15a6dc08741656");
+        AesKey = new FAesKey(UAGConfig.Data.AesKey);
         Info = new FPakInfo();
     }
 
