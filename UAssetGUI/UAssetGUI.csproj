@@ -9,10 +9,10 @@
     <AssemblyTitle>UAssetGUI</AssemblyTitle>
     <Product>UAssetGUI</Product>
     <Copyright>Copyright © Atenfyr 2024</Copyright>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
     <OutputPath>bin\$(Configuration)\</OutputPath>
-    <Configurations>Debug;Release;DebugVerbose;DebugTracing</Configurations>
+    <Configurations>Debug;Release;DebugVerbose;DebugTracing;ReleaseX</Configurations>
     <UseWindowsForms>true</UseWindowsForms>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Platforms>AnyCPU;x86</Platforms>
@@ -38,13 +38,21 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseX|AnyCPU'">
+    <DebugType>embedded</DebugType>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseX|x86'">
+    <DebugType>embedded</DebugType>
+    <Optimize>True</Optimize>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-    <Version>1.0.2</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
   <Target Name="BeforeBuildMigrated" BeforeTargets="PreBuildEvent">
     <Exec ContinueOnError="true" ConsoleToMsBuild="true" Command="git rev-parse --short HEAD">
