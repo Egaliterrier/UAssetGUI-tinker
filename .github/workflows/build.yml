@@ -1,14 +1,7 @@
 name: CI
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - ".github/**"
-      - ".gitignore"
-      - "*.md"
-
+  
 jobs:
   build:
     runs-on: windows-latest
@@ -68,10 +61,10 @@ jobs:
           name: v${{ steps.get_version.outputs.version }}-experimental-${{ steps.vars.outputs.sha_short }}
           path: ./build/*.exe
 
-    - name: Make Experimental Pre-Release
+    - name: Make Draft Release
       uses: softprops/action-gh-release@v2
       with:
-        prerelease: true
+        draft: true
         tag_name: experimental-latest
         name: v${{ steps.get_version.outputs.version }}-experimental-${{ steps.vars.outputs.sha_short }}
         files: ./build/*.exe
