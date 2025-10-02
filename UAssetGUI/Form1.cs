@@ -337,7 +337,8 @@ namespace UAssetGUI
             EngineVersion.VER_UE5_2,
             EngineVersion.VER_UE5_3,
             EngineVersion.VER_UE5_4,
-            EngineVersion.VER_UE5_5
+            EngineVersion.VER_UE5_5,
+            EngineVersion.VER_UE5_6
         };
 
         public static readonly string GitHubRepo = "atenfyr/UAssetGUI";
